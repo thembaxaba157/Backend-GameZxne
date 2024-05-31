@@ -24,7 +24,7 @@ public class PlayerModel {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id") //foreign key
+    @JoinColumn(name = "game_id") //foreign key
     private GameModel game;
     private String username;
     private int score;
