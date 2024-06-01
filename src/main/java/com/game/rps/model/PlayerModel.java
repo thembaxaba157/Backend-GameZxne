@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
 import com.game.rps.enums.Move;
+import com.game.rps.enums.Status.PlayerStatus;
 
 @Entity
 @Getter
@@ -30,7 +31,7 @@ public class PlayerModel {
     private GameModel game;
     private String username;
     private int score;
-
+    private PlayerStatus playerStatus;
     @Enumerated(EnumType.STRING)
     private Move playerMove;
 

@@ -2,7 +2,7 @@ package com.game.rps.model;
 
 import java.util.List;
 
-import com.game.rps.enums.GameStatus;
+import com.game.rps.enums.Status.GameStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
