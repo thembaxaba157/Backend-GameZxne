@@ -1,8 +1,11 @@
 package com.game.rps.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.game.rps.model.GameModel;
 import com.game.rps.repository.GameRepository;
 
 @Service
@@ -21,5 +24,22 @@ public class GameService {
         this.broadcastService = broadcastService;
     }
     
+
+    public List<GameModel> getAllGames(){
+        return gameRepository.findAll();
+    }
+
+    public GameModel getGame(Long id){
+        return gameRepository.findById(id).orElse(null);
+    }
+
+    public void deleteGame(Long id){
+        gameRepository.deleteById(id);
+    }
+
+    public void createGame(GameModel game){
+        gameRepository.save(game);
+    }
+
     
 }

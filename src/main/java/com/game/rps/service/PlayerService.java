@@ -1,11 +1,12 @@
 package com.game.rps.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.game.rps.model.PlayerModel;
 import com.game.rps.repository.PlayerRepository;
-import java.util.*;
 @Service
 public class PlayerService {
     
@@ -25,4 +26,9 @@ public class PlayerService {
         playerRepository.deleteById(id); // fix for some appopriate error
     }
 
+    public void savePlayer(PlayerModel player){
+        playerRepository.save(player);
+    }
+
+    
 }
