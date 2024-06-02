@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.game.rps.dto.MoveResponseDTO;
 import com.game.rps.dto.PlayerMoveDTO;
 import com.game.rps.enums.Move;
 import com.game.rps.enums.Status.GameStatus;
@@ -53,13 +54,14 @@ public class GameService {
     public void makeMove(PlayerMoveDTO playerMoveDTO){
         Optional<GameModel> game = gameRepository.findById(playerMoveDTO.getGame_id());
         PlayerModel player = playerService.getPlayer(playerMoveDTO.getPlayer_id());
+        MoveResponseDTO moveResponseDTO = new MoveResponseDTO();
         if(game.isPresent()){
             GameModel gameModel = game.get();
             if(player.getGame().equals(gameModel)){
             if(gameModel.getGameStatus().equals(GameStatus.IN_PROGRESS)){
                 if(playerMoveDTO.getMove() instanceof Move && player.getPlayerStatus().equals(PlayerStatus.NOTPICKED)){
                     player.setPlayerStatus(PlayerStatus.PICKED);
-                    
+
                 }
             }
         }
