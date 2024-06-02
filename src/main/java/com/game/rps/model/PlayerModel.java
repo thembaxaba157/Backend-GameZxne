@@ -9,10 +9,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 
-import com.game.rps.enums.Move;
 import com.game.rps.enums.Status.PlayerStatus;
 
 @Entity
@@ -31,10 +28,13 @@ public class PlayerModel {
     private GameModel game;
     private String username;
     private int score;
-    private PlayerStatus playerStatus;
-    @Enumerated(EnumType.STRING)
-    private Move playerMove;
+    private PlayerStatus playerStatus = PlayerStatus.NOTPICKED;
 
+
+    public void statusReset(){
+        this.playerStatus = PlayerStatus.NOTPICKED;
+    }
+   
 }
 
 
