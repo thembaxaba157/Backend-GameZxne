@@ -1,6 +1,8 @@
 package com.game.rps.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.game.rps.enums.Move;
 import com.game.rps.enums.Status.PlayerStatus;
 
 @Entity
@@ -29,6 +32,9 @@ public class PlayerModel {
     private String username;
     private int score;
     private PlayerStatus playerStatus = PlayerStatus.NOTPICKED;
+    
+    @Enumerated(EnumType.STRING)
+    private Move move;
 
 
     public void statusReset(){
