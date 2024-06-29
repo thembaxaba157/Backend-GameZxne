@@ -57,9 +57,9 @@ public class GameService {
         if(gameModel != null && player != null){
             List<PlayerModel> players = gameModel.getCurrentPlayers();
             if(!players.contains(player)){
+            player.setGame(gameModel);
             players.add(player);
             gameModel.setCurrentPlayers(players);
-            player.setGame(gameModel);
             playerService.savePlayer(player);
             gameRepository.save(gameModel);
             }
