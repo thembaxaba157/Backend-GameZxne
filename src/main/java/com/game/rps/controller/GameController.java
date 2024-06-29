@@ -1,12 +1,19 @@
 package com.game.rps.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.game.rps.model.GameModel;
 import com.game.rps.service.GameService;
-
-import java.util.List;
 
 
 @RestController
@@ -52,5 +59,11 @@ public class GameController {
         } else {
             return null; // or handle error appropriately
         }
+    }
+
+    @PutMapping("join/{id}")
+    public GameModel joinGame(@PathVariable Long id, @RequestBody Long playerId){
+        
+       return gameService.addPlayer(playerId, id);
     }
 }

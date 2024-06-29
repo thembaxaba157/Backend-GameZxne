@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.game.rps.enums.Move;
 import com.game.rps.enums.Status.PlayerStatus;
 
@@ -28,6 +29,7 @@ public class PlayerModel {
 
     @ManyToOne
     @JoinColumn(name = "game_id") //foreign key
+    @JsonBackReference //research from https://chatgpt.com/c/be49b869-d3db-48a8-88ab-5430278e03f4
     private GameModel game;
     private String username;
     private int score;

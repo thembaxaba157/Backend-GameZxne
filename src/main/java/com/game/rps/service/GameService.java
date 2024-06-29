@@ -50,6 +50,22 @@ public class GameService {
         gameRepository.save(game);
     }
 
+    @Transactional
+    public GameModel addPlayer(Long playerid, Long gameid){
+        GameModel gameModel = gameRepository.findById(gameid).orElse(null);
+        PlayerModel player = playerService.getPlayer(playerid);
+        if(gameModel != null && player != null){
+            List<PlayerModel> players = gameModel.getCurrentPlayers();
+            if(!players.contains(player)){
+            players.add(player);
+            gameModel.setCurrentPlayers(players);
+            player.setGame(gameModel);
+            playerService.savePlayer(player);
+            gameRepository.save(gameModel);
+            }
+        }
+        return gameModel;
+    }
     
     @Transactional
     public MoveResponseDTO makeMove(PlayerMoveDTO playerMoveDTO){
