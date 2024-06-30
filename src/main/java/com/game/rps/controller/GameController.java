@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.game.rps.dto.MoveResponseDTO;
+import com.game.rps.dto.PlayerMoveDTO;
 import com.game.rps.model.GameModel;
 import com.game.rps.service.GameService;
 
@@ -66,4 +69,11 @@ public class GameController {
         
        return gameService.addPlayer(playerId, id);
     }
+
+    @PostMapping("/move")
+    @ResponseBody
+    public MoveResponseDTO makeMove(@RequestBody PlayerMoveDTO playerMoveDTO) {
+        return gameService.makeMove(playerMoveDTO);
+    }
+
 }

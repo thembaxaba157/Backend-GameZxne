@@ -89,21 +89,77 @@ public class GameService {
         }
 
         if(allPlayersPicked(gameModel)){
+            calculateScores(gameModel);
             broadcastService.broadcastMessage(gameModel);
         }
 
         }
 
-       
-
-
         return moveResponseDTO;
 
     }
 
-    
+    @Transactional
+    private void calculateScores(GameModel gameModel) {
+        List<PlayerModel> players = gameModel.getCurrentPlayers();
+        for(int i=0; i<players.size();i++){
+            PlayerModel player = players.get(i);
+            for(int j=i+1; j<players.size();j++){
+                PlayerModel opponent = players.get(j);
+                decide(player,opponent);
+        }
+    }
+    players = playerService.getAllPlayers();
+    gameModel.setCurrentPlayers(players);
+    gameRepository.save(gameModel);
+    }
 
-        
+    @Transactional
+    private void decide(PlayerModel player, PlayerModel opponent) {
+        if(player.getMove().equals(opponent.getMove())){
+            player.setScore(player.getScore()+1);
+            opponent.setScore(opponent.getScore()+1);
+
+            playerService.savePlayer(player);
+            playerService.savePlayer(opponent);
+       }
+       else if(player.getMove().equals(Move.PAPER) && opponent.getMove().equals(Move.ROCK)){
+        player.setScore(player.getScore()+2);
+
+        playerService.savePlayer(player);
+       }
+       else if(player.getMove().equals(Move.ROCK) && opponent.getMove().equals(Move.SCISSORS)){
+        player.setScore(player.getScore()+2);
+
+        playerService.savePlayer(player);
+       }
+       else if(player.getMove().equals(Move.SCISSORS) && opponent.getMove().equals(Move.PAPER)){
+        player.setScore(player.getScore()+2);
+
+        playerService.savePlayer(player);
+       }
+
+
+
+       else if(opponent.getMove().equals(Move.PAPER) && player.getMove().equals(Move.ROCK)){
+        opponent.setScore(opponent.getScore()+2);
+
+        playerService.savePlayer(opponent);
+       }
+       else if(opponent.getMove().equals(Move.ROCK) && player.getMove().equals(Move.SCISSORS)){
+        opponent.setScore(opponent.getScore()+2);
+
+        playerService.savePlayer(opponent);
+       }
+       else if(opponent.getMove().equals(Move.SCISSORS) && player.getMove().equals(Move.PAPER)){
+        opponent.setScore(opponent.getScore()+2);
+
+        playerService.savePlayer(opponent);
+       }
+
+    }
+
+
         private boolean allPlayersPicked(GameModel gameModel) {
             if (gameModel.getCurrentPlayers() == null || gameModel.getCurrentPlayers().isEmpty()) {
                 return false;
