@@ -89,7 +89,7 @@ public class GameService {
         }
 
         if(allPlayersPicked(gameModel)){
-            broadcastService.broadcastMessage("testing"); 
+            broadcastService.broadcastMessage(gameModel);
         }
 
         }
