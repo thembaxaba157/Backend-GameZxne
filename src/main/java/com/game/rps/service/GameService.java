@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.game.rps.dto.GameResultDTO;
 import com.game.rps.dto.MoveResponseDTO;
 import com.game.rps.dto.PlayerMoveDTO;
 import com.game.rps.enums.Move;
@@ -84,23 +85,46 @@ public class GameService {
                     moveResponseDTO.setMoveResponseMessage(MoveResponseMessage.SUCCESS);
                  }
             }
-
-
         }
 
         if(allPlayersPicked(gameModel)){
-            calculateScores(gameModel);
-            broadcastService.broadcastMessage(gameModel);
-        }
+            gameModel = calculateScores(gameModel);
+            broadcastService.broadcastMessage(toGameResultDTO(gameModel));
 
+        }
         }
 
         return moveResponseDTO;
 
     }
 
+    private GameResultDTO toGameResultDTO(GameModel gameModel){
+
+        GameResultDTO gameResultDTO = new GameResultDTO();
+        gameResultDTO.setGame(gameModel);
+        if(gameModel.getGameStatus().equals(GameStatus.GAME_OVER)){
+           gameResultDTO.setWinner(determineWinner(gameModel.getCurrentPlayers()));
+        }
+
+        return gameResultDTO;
+
+    }
+
+    private PlayerModel determineWinner(List<PlayerModel> currentPlayers) {
+       PlayerModel winner = null;
+       int maxScore = 0;
+       for(PlayerModel player : currentPlayers){
+        if(player.getScore() > maxScore){
+            maxScore = player.getScore();
+            winner = player;
+            }
+            }
+        return winner;
+    }
+
+
     @Transactional
-    private void calculateScores(GameModel gameModel) {
+    private GameModel calculateScores(GameModel gameModel) {
         List<PlayerModel> players = gameModel.getCurrentPlayers();
         for(int i=0; i<players.size();i++){
             PlayerModel player = players.get(i);
@@ -109,12 +133,37 @@ public class GameService {
                 decide(player,opponent);
         }
     }
+    gameModel = setNextRound(gameModel);
     players = playerService.getAllPlayers();
     gameModel.setCurrentPlayers(players);
-    gameRepository.save(gameModel);
+    return gameRepository.save(gameModel);
     }
 
-    @Transactional
+   private GameModel setNextRound(GameModel gameModel) {
+      if(gameModel.getCurrentRound()<gameModel.getNumberOfRounds()){
+        gameModel.setCurrentRound(gameModel.getCurrentRound()+1);
+        gameModel = playerStatusReset(gameModel);
+      }
+      else{
+        gameModel.setGameStatus(GameStatus.GAME_OVER);
+      }
+
+      return gameModel;
+    }
+
+
+ private GameModel playerStatusReset(GameModel gameModel) {
+	List<PlayerModel> players = gameModel.getCurrentPlayers();
+    for(PlayerModel player : players){
+        player.statusReset();
+        playerService.savePlayer(player);
+        }
+    gameModel.setCurrentPlayers(playerService.getAllPlayers());
+    return gameModel;
+}
+
+
+@Transactional
     private void decide(PlayerModel player, PlayerModel opponent) {
         if(player.getMove().equals(opponent.getMove())){
             player.setScore(player.getScore()+1);
