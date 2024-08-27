@@ -1,12 +1,21 @@
 package com.game.rps.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.game.rps.model.PlayerModel;
 import com.game.rps.service.PlayerService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/players")
@@ -39,17 +48,8 @@ public class PlayerController {
     }
     
     @PutMapping("/{id}")
-    public PlayerModel updatePlayer(@PathVariable Long id, @RequestBody PlayerModel updatedPlayer) {
-        PlayerModel existingPlayer = playerService.getPlayer(id);
-        if (existingPlayer != null) {
-            existingPlayer.setUsername(updatedPlayer.getUsername());
-            existingPlayer.setScore(updatedPlayer.getScore());
-            existingPlayer.setPlayerStatus(updatedPlayer.getPlayerStatus());
-            existingPlayer.setMove(updatedPlayer.getMove());
-            playerService.savePlayer(existingPlayer); // save the updated player
-            return existingPlayer;
-        } else {
-            return null; // or handle error appropriately
-        }
+    public ResponseEntity<PlayerModel> updatePlayer(@PathVariable Long id, @RequestBody PlayerModel updatedPlayer) {
+      return new ResponseEntity<>(playerService.updatePlayer(updatedPlayer, id), HttpStatus.OK);
+           
     }
 }

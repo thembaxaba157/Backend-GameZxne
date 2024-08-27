@@ -51,6 +51,8 @@ public class GameService {
        return gameRepository.save(game);
     }
 
+
+    @Transactional
     public GameModel updateGame(GameModel gameUpdatesGameModel){
         GameModel currentGame = getGame(gameUpdatesGameModel.getId());
         currentGame.setCurrentPlayers(gameUpdatesGameModel.getCurrentPlayers());
