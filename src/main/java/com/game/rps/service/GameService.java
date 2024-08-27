@@ -14,6 +14,7 @@ import com.game.rps.enums.Move;
 import com.game.rps.enums.MoveResponseMessage;
 import com.game.rps.enums.Status.GameStatus;
 import com.game.rps.enums.Status.PlayerStatus;
+import com.game.rps.exceptions.GameNotFoundException;
 import com.game.rps.model.GameModel;
 import com.game.rps.model.PlayerModel;
 import com.game.rps.repository.GameRepository;
@@ -40,10 +41,11 @@ public class GameService {
     }
 
     public GameModel getGame(Long id){
-        return gameRepository.findById(id).orElse(null);
+        return gameRepository.findById(id).orElseThrow(()-> new GameNotFoundException("Game not Found"));
     }
 
     public void deleteGame(Long id){
+        getGame(id); //it will get game if exists then will proceed to delete if not an exception will thrown
         gameRepository.deleteById(id);
     }
 
@@ -69,7 +71,7 @@ public class GameService {
 
     @Transactional
     public GameModel addPlayer(Long playerid, Long gameid){
-        GameModel gameModel = gameRepository.findById(gameid).orElse(null);
+        GameModel gameModel = getGame(gameid);
         PlayerModel player = playerService.getPlayer(playerid);
         if(gameModel != null && player != null){
             List<PlayerModel> players = gameModel.getCurrentPlayers();

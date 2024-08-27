@@ -8,17 +8,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.game.rps.enums.Move;
 import com.game.rps.enums.Status.PlayerStatus;
 
 @Entity
-@Getter
-@Setter
+@Data
+// @Getter
+// @Setter
 @EqualsAndHashCode
 public class PlayerModel {
     
