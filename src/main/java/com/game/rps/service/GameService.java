@@ -47,9 +47,23 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    public void createGame(GameModel game){
-        gameRepository.save(game);
+    public GameModel createGame(GameModel game){
+       return gameRepository.save(game);
     }
+
+    public GameModel updateGame(GameModel gameUpdatesGameModel){
+        GameModel currentGame = getGame(gameUpdatesGameModel.getId());
+        currentGame.setCurrentPlayers(gameUpdatesGameModel.getCurrentPlayers());
+        currentGame.setCurrentRound(gameUpdatesGameModel.getCurrentRound());
+        currentGame.setGameStatus(gameUpdatesGameModel.getGameStatus());
+        currentGame.setLobbyName(gameUpdatesGameModel.getLobbyName());
+        currentGame.setNumberOfRounds(gameUpdatesGameModel.getNumberOfRounds());
+
+        return gameRepository.save(currentGame);
+        
+    }
+
+
 
     @Transactional
     public GameModel addPlayer(Long playerid, Long gameid){
@@ -222,7 +236,5 @@ public class GameService {
     
             return true;
         }
-
-    
 
 }

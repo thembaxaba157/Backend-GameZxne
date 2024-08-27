@@ -3,6 +3,8 @@ package com.game.rps.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,49 +33,39 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-    
-
     @GetMapping("/{id}")
-    public GameModel getGame(@PathVariable Long id) {
-        return gameService.getGame(id);
+    public ResponseEntity<GameModel> getGame(@PathVariable Long id){
+        return new ResponseEntity<>(gameService.getGame(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public GameModel createGame(@RequestBody GameModel game) {
-        gameService.createGame(game);
-        return game;
+    public ResponseEntity<GameModel> createGame(@RequestBody GameModel game){
+        return new ResponseEntity<>(gameService.createGame(game), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteGame(@PathVariable Long id) {
+    public ResponseEntity<String> deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);
+        return new ResponseEntity<>("Game Lobby deleted", HttpStatus.OK);
     }
     
     @PutMapping("/{id}")
-    public GameModel updateGame(@PathVariable Long id, @RequestBody GameModel updatedGame) {
-        GameModel existingGame = gameService.getGame(id);
-        if (existingGame != null) {
-            existingGame.setLobbyName(updatedGame.getLobbyName());
-            existingGame.setCurrentRound(updatedGame.getCurrentRound());
-            existingGame.setNumberOfRounds(updatedGame.getNumberOfRounds());
-            existingGame.setGameStatus(updatedGame.getGameStatus());
-            gameService.createGame(existingGame); // save the updated game
-            return existingGame;
-        } else {
-            return null; // or handle error appropriately
-        }
+    public ResponseEntity<GameModel> updateGame(@PathVariable Long id, @RequestBody GameModel updatedGame) {
+      return new ResponseEntity<>(gameService.updateGame(updatedGame), HttpStatus.OK);
     }
 
+    
     @PutMapping("join/{id}")
-    public GameModel joinGame(@PathVariable Long id, @RequestBody Long playerId){
+    public ResponseEntity<GameModel> joinGame(@PathVariable Long id, @RequestBody Long playerId){
         
-       return gameService.addPlayer(playerId, id);
+       return new ResponseEntity<>(gameService.addPlayer(playerId, id),HttpStatus.OK);
     }
 
     @PostMapping("/move")
     @ResponseBody
-    public MoveResponseDTO makeMove(@RequestBody PlayerMoveDTO playerMoveDTO) {
-        return gameService.makeMove(playerMoveDTO);
+    public ResponseEntity<MoveResponseDTO> makeMove(@RequestBody PlayerMoveDTO playerMoveDTO) {
+        
+        return new ResponseEntity<>(gameService.makeMove(playerMoveDTO), HttpStatus.OK);
     }
 
 }
