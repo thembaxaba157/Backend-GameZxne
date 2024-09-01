@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.game</groupId>
-	<artifactId>rps</artifactId>
+	<artifactId>gamezxne</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>rps</name>
 	<description>Demo project for Spring Boot</description>
