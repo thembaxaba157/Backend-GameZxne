@@ -1,4 +1,4 @@
-package com.game.gamezxne.rps.websocket;
+package com.game.gamezxne.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;

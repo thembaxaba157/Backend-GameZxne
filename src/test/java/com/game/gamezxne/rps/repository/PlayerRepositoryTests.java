@@ -5,7 +5,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.game.gamezxne.rps.model.PlayerModel;
-import com.game.gamezxne.rps.repository.PlayerRepository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
