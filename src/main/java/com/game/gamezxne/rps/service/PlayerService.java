@@ -43,7 +43,7 @@ public class PlayerService {
         existingPlayer.setUsername(updatedPlayer.getUsername());
         existingPlayer.setScore(updatedPlayer.getScore());
         existingPlayer.setPlayerStatus(updatedPlayer.getPlayerStatus());
-        existingPlayer.setMove(updatedPlayer.getMove());
+        existingPlayer.setPMove(updatedPlayer.getPMove());
         return savePlayer(existingPlayer);
     }
     

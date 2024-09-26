@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +23,7 @@ import com.game.gamezxne.rps.enums.Status.PlayerStatus;
 // @Getter
 // @Setter
 @Builder
+@Table(name = "player_model")
 @EqualsAndHashCode
 public class PlayerModel {
     
@@ -41,7 +43,7 @@ public class PlayerModel {
     private PlayerStatus playerStatus = PlayerStatus.NOTPICKED;
     
     @Enumerated(EnumType.STRING)
-    private Move move;
+    private Move pMove;
 
 
     public void statusReset(){

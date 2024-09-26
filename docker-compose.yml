@@ -1,0 +1,23 @@
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_app
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: gamezxne_db
+      MYSQL_USER: gamezxne_user
+      MYSQL_PASSWORD: user1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+    - gamezxne-network
+
+volumes:
+    mysql-data:
+
+networks:
+  gamezxne-network:
+    driver: bridge

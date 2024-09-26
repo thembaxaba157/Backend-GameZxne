@@ -97,7 +97,7 @@ public class GameService {
             if(gameModel.getGameStatus().equals(GameStatus.IN_PROGRESS)){
                 if(playerMoveDTO.getMove() instanceof Move && player.getPlayerStatus().equals(PlayerStatus.NOTPICKED)){
                     player.setPlayerStatus(PlayerStatus.PICKED);
-                    player.setMove(playerMoveDTO.getMove());
+                    player.setPMove(playerMoveDTO.getMove());
                     moveResponseDTO.setGame_id(player.getId());
                     moveResponseDTO.setPlayerId(player.getId());
                     moveResponseDTO.setMoveResponseMessage(MoveResponseMessage.SUCCESS);
@@ -183,24 +183,24 @@ public class GameService {
 
 @Transactional
     private void decide(PlayerModel player, PlayerModel opponent) {
-        if(player.getMove().equals(opponent.getMove())){
+        if(player.getPMove().equals(opponent.getPMove())){
             player.setScore(player.getScore()+1);
             opponent.setScore(opponent.getScore()+1);
 
             playerService.savePlayer(player);
             playerService.savePlayer(opponent);
        }
-       else if(player.getMove().equals(Move.PAPER) && opponent.getMove().equals(Move.ROCK)){
+       else if(player.getPMove().equals(Move.PAPER) && opponent.getPMove().equals(Move.ROCK)){
         player.setScore(player.getScore()+2);
 
         playerService.savePlayer(player);
        }
-       else if(player.getMove().equals(Move.ROCK) && opponent.getMove().equals(Move.SCISSORS)){
+       else if(player.getPMove().equals(Move.ROCK) && opponent.getPMove().equals(Move.SCISSORS)){
         player.setScore(player.getScore()+2);
 
         playerService.savePlayer(player);
        }
-       else if(player.getMove().equals(Move.SCISSORS) && opponent.getMove().equals(Move.PAPER)){
+       else if(player.getPMove().equals(Move.SCISSORS) && opponent.getPMove().equals(Move.PAPER)){
         player.setScore(player.getScore()+2);
 
         playerService.savePlayer(player);
@@ -208,17 +208,17 @@ public class GameService {
 
 
 
-       else if(opponent.getMove().equals(Move.PAPER) && player.getMove().equals(Move.ROCK)){
+       else if(opponent.getPMove().equals(Move.PAPER) && player.getPMove().equals(Move.ROCK)){
         opponent.setScore(opponent.getScore()+2);
 
         playerService.savePlayer(opponent);
        }
-       else if(opponent.getMove().equals(Move.ROCK) && player.getMove().equals(Move.SCISSORS)){
+       else if(opponent.getPMove().equals(Move.ROCK) && player.getPMove().equals(Move.SCISSORS)){
         opponent.setScore(opponent.getScore()+2);
 
         playerService.savePlayer(opponent);
        }
-       else if(opponent.getMove().equals(Move.SCISSORS) && player.getMove().equals(Move.PAPER)){
+       else if(opponent.getPMove().equals(Move.SCISSORS) && player.getPMove().equals(Move.PAPER)){
         opponent.setScore(opponent.getScore()+2);
 
         playerService.savePlayer(opponent);

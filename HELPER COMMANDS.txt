@@ -1,0 +1,14 @@
+run docker compose
+    - docker-compose up =
+stop docker compose
+    - docker-compose -down
+
+run mysql from terminal using docker
+    - docker exec -it <container name> mysql -u gamezxne_user -p
+
+check current running dockers
+    - docker ps
+
+chech volumes incase one of the volumes is corrupt
+    - docker volume ls
+    - user docker rm to remove the volume
