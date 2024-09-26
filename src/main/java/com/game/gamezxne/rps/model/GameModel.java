@@ -39,7 +39,6 @@ public class GameModel {
         
     @Enumerated(EnumType.STRING)//From persistance, this will convert enum to string whenever requested or stored in the database
     // @Column(name = "game_status", nullable = false, columnDefinition = "VARCHAR")
-    @Column(name = "game_status", nullable = false,columnDefinition = "varchar(255)")
     private GameStatus gameStatus;
     
     private int currentRound;
