@@ -5,7 +5,6 @@
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
 # documentation.
-
 name: CI/CD Workflow for GameZxne
 
 on:
@@ -22,7 +21,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -30,9 +29,8 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Set up docker compose
-      uses: docker-compose up -d db
-
+    - name: Start Docker Compose for MySQL
+      run: docker-compose up -d db
 
     - name: Wait for MySQL to be ready
       run: |
@@ -44,12 +42,15 @@ jobs:
           echo 'Waiting for MySQL...';
           sleep 1;
         done;
-    
-    - name: Unit test
+
+    - name: Run Unit tests
       run: mvn -B test --file pom.xml
-   
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Stop Docker Compose
+      run: docker-compose down
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     # - name: Update dependency graph
