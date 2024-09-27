@@ -29,9 +29,23 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    - name: Set up docker compose
+      uses: docker-compose up -d db
+
+
+    - name: Wait for MySQL to be ready
+      run: |
+        for i in {30..0}; do
+          if docker exec mysql_app mysqladmin ping -h"127.0.0.1" --silent; then
+            echo "MySQL is up!";
+            break;
+          fi
+          echo 'Waiting for MySQL...';
+          sleep 1;
+        done;
     
     - name: Unit test
-      run: mvn install
       run: mvn -B test --file pom.xml
    
     - name: Build with Maven

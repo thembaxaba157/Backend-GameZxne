@@ -11,14 +11,17 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.game.gamezxne.rps.model.PlayerModel;
 
 import jakarta.transaction.Transactional;
 
-// @DataJpaTest
-@SpringBootTest(properties = { "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect" })
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DataJpaTest
+@ActiveProfiles("test")
+// @SpringBootTest(properties = { "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect" })
+// @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
 
 public class PlayerRepositoryTests {

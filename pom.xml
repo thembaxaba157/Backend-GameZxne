@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -58,18 +58,9 @@
 				<version>8.0.33</version>
 			</dependency>
 
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<scope>runtime</scope>
-			</dependency>
+			
 
-			<dependency>
-				<groupId>org.testcontainers</groupId>
-				<artifactId>mysql</artifactId>
-				<version>1.19.0</version>
-				<scope>test</scope>
-			</dependency>
+			
 			
 			<dependency>
 				<groupId>org.testcontainers</groupId>
@@ -78,7 +69,11 @@
 				<scope>test</scope>
 			</dependency>
 
-
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-test-autoconfigure</artifactId>
+				<scope>test</scope>
+			</dependency>
 
 
 
