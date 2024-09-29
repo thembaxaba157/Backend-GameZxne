@@ -10,5 +10,5 @@ plugins:
       message: "chore(release): bump ${nextRelease.version}"
 
 branches:
-  - "master"
+  - "main"
   - "+([0-9])?(.{+([0-9]),x}).x"
