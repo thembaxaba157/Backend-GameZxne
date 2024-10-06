@@ -15,7 +15,7 @@ on:
 
 jobs:
   build:
-    name: WHOLE THING FOR NOW
+    name: Build Project
     runs-on: ubuntu-latest
 
     steps:
