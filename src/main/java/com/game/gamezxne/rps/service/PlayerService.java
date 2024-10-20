@@ -4,17 +4,24 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.game.gamezxne.auth.model.UserModel;
+import com.game.gamezxne.auth.repository.UserRepository;
+import com.game.gamezxne.rps.dto.PlayerDTO;
 import com.game.gamezxne.rps.exceptions.PlayerNotFoundException;
 import com.game.gamezxne.rps.model.PlayerModel;
 import com.game.gamezxne.rps.repository.PlayerRepository;
 
-import jakarta.transaction.Transactional;
+
 @Service
 public class PlayerService {
     
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     public List<PlayerModel> getAllPlayers(){
@@ -36,15 +43,36 @@ public class PlayerService {
     }
 
     @Transactional
+    public PlayerDTO createPlayer(String username){
+
+        UserModel user = userRepository.findByUsername(username);
+        PlayerModel playerModel = PlayerModel.builder().user(user).build();
+        return toPlayerDto(savePlayer(playerModel));
+      
+       
+    }
+
+    @Transactional
     public PlayerModel updatePlayer(PlayerModel updatedPlayer, Long id){
       
         PlayerModel existingPlayer = getPlayer(id);
-      
-        existingPlayer.setUsername(updatedPlayer.getUsername());
         existingPlayer.setScore(updatedPlayer.getScore());
         existingPlayer.setPlayerStatus(updatedPlayer.getPlayerStatus());
         existingPlayer.setPMove(updatedPlayer.getPMove());
         return savePlayer(existingPlayer);
+    }
+
+    public PlayerDTO getPlayerByUsername(String userName) {
+        UserModel user = userRepository.findByUsername(userName);
+
+        return toPlayerDto(playerRepository.findByUser(user));
+      
+    }
+
+
+    private PlayerDTO toPlayerDto(PlayerModel playerModel){
+        PlayerDTO playerDTO = PlayerDTO.builder().id(playerModel.getId()).username(playerModel.getUser().getUsername()).build();
+        return playerDTO;
     }
     
 }

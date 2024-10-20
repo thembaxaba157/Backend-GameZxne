@@ -33,7 +33,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/auth/**").permitAll() // Allow public access to /auth
-                    .anyRequest().authenticated()         // All other requests need authentication
+                    .anyRequest().authenticated()        // All other requests need authentication
+                    
             )
             .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Use stateless sessions (JWT)

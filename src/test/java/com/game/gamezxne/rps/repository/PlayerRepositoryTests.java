@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.rps.model.PlayerModel;
 
 import jakarta.transaction.Transactional;
@@ -33,8 +34,14 @@ public class PlayerRepositoryTests {
     
     @Test
     public void PlayerRepository_SaveAll_ReturnSavedPlayer(){
+        
+
         // Arrange
-        PlayerModel player = PlayerModel.builder().game(null).username("Player 1").build();
+        UserModel user = UserModel.builder().username("user1234")
+                                            .email("User1234@fakeemail.com")
+                                            .password("strongpassword").build();
+
+        PlayerModel player = PlayerModel.builder().game(null).user(user).build();
         
         PlayerModel savedPlayer = playerRepository.save(player);
 
