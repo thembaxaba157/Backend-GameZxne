@@ -37,9 +37,10 @@ public class PlayerRepositoryTests {
         
 
         // Arrange
-        UserModel user = UserModel.builder().username("user1234")
-                                            .email("User1234@fakeemail.com")
-                                            .password("strongpassword").build();
+        UserModel user =  new UserModel();
+        user.setUsername("user1234");
+        user.setPassword("strongpassword");
+        user.setEmail("user1234@fakeemail.com");
 
         PlayerModel player = PlayerModel.builder().game(null).user(user).build();
         

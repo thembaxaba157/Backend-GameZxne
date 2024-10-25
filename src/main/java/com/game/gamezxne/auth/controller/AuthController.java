@@ -41,7 +41,6 @@ public class AuthController {
        @PostMapping("/login")
     public String login(@RequestBody AuthRequestDto authRequest) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        System.out.println("did we get here?");
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         return jwtTokenProvider.generateToken(userDetails);
     }
