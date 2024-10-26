@@ -1,5 +1,6 @@
 package com.game.gamezxne.rps.model;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +17,7 @@ import lombok.EqualsAndHashCode;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.rps.enums.Move;
 import com.game.gamezxne.rps.enums.Status.PlayerStatus;
 
@@ -36,7 +39,9 @@ public class PlayerModel {
     @JoinColumn(name = "game_id") //foreign key
     @JsonBackReference //research from https://chatgpt.com/c/be49b869-d3db-48a8-88ab-5430278e03f4
     private GameModel game;
-    private String username;
+    @Nonnull
+    @OneToOne
+    private UserModel user;
     private int score;
     
     @Builder.Default

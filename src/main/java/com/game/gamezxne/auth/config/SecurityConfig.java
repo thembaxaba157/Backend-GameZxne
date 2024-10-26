@@ -33,6 +33,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/auth/**").permitAll() // Allow public access to /auth
+                    .requestMatchers("/ws/**").permitAll() // Allow public access to /game
+                    .requestMatchers("/lobby").permitAll()
                     .anyRequest().authenticated()         // All other requests need authentication
             )
             .sessionManagement(session -> 
