@@ -15,28 +15,22 @@ public class WebSocketInterceptor implements HandshakeInterceptor {
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler,
-            Map<String, Object> attributes) throws Exception {
-       String authHeader = request.getHeaders().getFirst("Authorization");
-
-       System.out.println(authHeader);
-
-
-       if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String jwtToken = authHeader.substring(7);
-            
-            // Validate the token (add your JWT validation logic here)
-            boolean isValidToken = validateJwtToken(jwtToken);
+                                   Map<String, Object> attributes) throws Exception {
+        // Get token from query parameters
+        String token = request.getURI().getQuery();
+        System.out.println(token);
+    
+        if (token != null && token.startsWith("token=")) {
+            token = token.substring(6); // Remove 'token=' prefix
+            boolean isValidToken = validateJwtToken(token);
             if (isValidToken) {
-                // Proceed with WebSocket connection
                 return true;
             }
         }
-        
-        // Reject the connection if the token is invalid or absent
+    
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
         return false;
     }
-
    
 
     @Override
