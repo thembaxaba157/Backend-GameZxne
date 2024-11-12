@@ -7,6 +7,7 @@ public class CreateGameDTO {
 
     private String lobbyName;
     private int numberOfRounds;
+    private int playerId;
    
     
 }

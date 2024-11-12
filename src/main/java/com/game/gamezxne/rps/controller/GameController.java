@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +48,15 @@ public class GameController {
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<GameModel> createGame(@RequestBody CreateGameDTO game){
-        return new ResponseEntity<>(gameService.createGame(game), HttpStatus.CREATED);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = null;
+
+        if(authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+
+        return new ResponseEntity<>(gameService.createGame(game, userName), HttpStatus.CREATED);
     }
 
     

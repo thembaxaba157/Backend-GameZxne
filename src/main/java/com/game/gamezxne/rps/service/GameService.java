@@ -50,17 +50,24 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    public GameModel createGame(CreateGameDTO game){
-       GameModel gameModel = convertToGameModel(game);
-       return gameRepository.save(gameModel);
+    public GameModel createGame(CreateGameDTO game, String userName){
+
+        PlayerModel player = playerService.getPlayerModelByUsername(userName);
+        if(player.getId() == game.getPlayerId()){
+            //complete for verification
+        }
+        GameModel gameModel = convertToGameModel(game, player);
+        return gameRepository.save(gameModel);
     }
 
 
-    private GameModel convertToGameModel(CreateGameDTO gameDTO){
+    private GameModel convertToGameModel(CreateGameDTO gameDTO, PlayerModel player){
 
         GameModel game = new GameModel();
         game.setLobbyName(gameDTO.getLobbyName());
         game.setNumberOfRounds(gameDTO.getNumberOfRounds());
+        game.setLobbyMasterPlayer(player);
+        game = addPlayer(player.getId(),game.getId());
 
         return game;
     }

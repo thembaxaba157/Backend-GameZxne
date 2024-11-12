@@ -32,6 +32,11 @@ public class PlayerService {
         return playerRepository.findById(id).orElseThrow(()-> new PlayerNotFoundException("Player not Found")); //fix to return an appropriate error
     }
 
+    public PlayerModel getPlayerModelByUsername(String username){
+        UserModel user = userRepository.findByUsername(username);
+        return playerRepository.findByUser(user);
+    }
+
     public void deletePlayer(Long id){
         getPlayer(id); //check if player exists if not an exception will thrown
         playerRepository.deleteById(id); // fix for some appopriate error
