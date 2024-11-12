@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.game.gamezxne.rps.dto.CreateGameDTO;
 import com.game.gamezxne.rps.dto.MoveResponseDTO;
 import com.game.gamezxne.rps.dto.PlayerMoveDTO;
 import com.game.gamezxne.rps.model.GameModel;
@@ -38,11 +40,15 @@ public class GameController {
         return new ResponseEntity<>(gameService.getGame(id), HttpStatus.OK);
     }
 
+
+    
     @PostMapping
-    public ResponseEntity<GameModel> createGame(@RequestBody GameModel game){
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GameModel> createGame(@RequestBody CreateGameDTO game){
         return new ResponseEntity<>(gameService.createGame(game), HttpStatus.CREATED);
     }
 
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteGame(@PathVariable Long id) {
         gameService.deleteGame(id);

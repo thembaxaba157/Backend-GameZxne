@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.game.gamezxne.auth.model.UserModel;
+import com.game.gamezxne.auth.repository.UserRepository;
 import com.game.gamezxne.rps.model.PlayerModel;
 
 import jakarta.transaction.Transactional;
@@ -26,6 +28,9 @@ public class PlayerRepositoryTests {
     
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @AfterEach
     public void clearRepo() {
@@ -42,8 +47,11 @@ public class PlayerRepositoryTests {
         user.setPassword("strongpassword");
         user.setEmail("user1234@fakeemail.com");
 
-        PlayerModel player = PlayerModel.builder().game(null).user(user).build();
         
+        user = userRepository.save(user);
+
+        PlayerModel player = PlayerModel.builder().game(null).user(user).build();
+        player.setUser(user);
         PlayerModel savedPlayer = playerRepository.save(player);
 
          //Assert

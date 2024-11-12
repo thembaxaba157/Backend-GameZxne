@@ -28,22 +28,17 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    //saveforadmin
     @GetMapping
     public List<PlayerModel> getAllPlayers() {
         return playerService.getAllPlayers();
     }
 
+    //saveforadmin
     @GetMapping("/{id}")
     public PlayerModel getPlayer(@PathVariable Long id) {
         return playerService.getPlayer(id);
     }
-
-
-    // @PostMapping("/create")
-    // public PlayerModel createPlayer(@RequestBody PlayerModel player) {
-    //     playerService.savePlayer(player);
-    //     return player;
-    // }
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")

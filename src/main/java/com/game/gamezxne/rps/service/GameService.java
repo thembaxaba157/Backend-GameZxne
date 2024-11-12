@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.game.gamezxne.rps.dto.CreateGameDTO;
 import com.game.gamezxne.rps.dto.GameResultDTO;
 import com.game.gamezxne.rps.dto.MoveResponseDTO;
 import com.game.gamezxne.rps.dto.PlayerMoveDTO;
@@ -49,10 +50,20 @@ public class GameService {
         gameRepository.deleteById(id);
     }
 
-    public GameModel createGame(GameModel game){
-       return gameRepository.save(game);
+    public GameModel createGame(CreateGameDTO game){
+       GameModel gameModel = convertToGameModel(game);
+       return gameRepository.save(gameModel);
     }
 
+
+    private GameModel convertToGameModel(CreateGameDTO gameDTO){
+
+        GameModel game = new GameModel();
+        game.setLobbyName(gameDTO.getLobbyName());
+        game.setNumberOfRounds(gameDTO.getNumberOfRounds());
+
+        return game;
+    }
 
     @Transactional
     public GameModel updateGame(GameModel gameUpdatesGameModel){
