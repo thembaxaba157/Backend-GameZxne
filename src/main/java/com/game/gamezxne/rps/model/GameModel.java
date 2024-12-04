@@ -36,7 +36,6 @@ public class GameModel {
     @JsonManagedReference //research from https://chatgpt.com/c/be49b869-d3db-48a8-88ab-5430278e03f4
     private List<PlayerModel> currentPlayers;
     
-    private PlayerModel lobbyOwner;
 
     @Enumerated(EnumType.STRING)//From persistance, this will convert enum to string whenever requested or stored in the database
     // @Column(name = "game_status", nullable = false, columnDefinition = "VARCHAR")
@@ -45,6 +44,8 @@ public class GameModel {
     private int currentRound;
     
     private int numberOfRounds;
+
+    private int numberOfPlayers;
 
     private PlayerModel lobbyMasterPlayer;
     

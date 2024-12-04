@@ -7,13 +7,29 @@ public class Status{
 
         IN_PROGRESS, //ROUND STILL IN PROGRESS
         GAME_OVER, // Game is over
-        WAITING_FOR_PLAYERS // Waiting for people to connect
+        DEATH_ROUNDS,
+        WAITING_FOR_PLAYERS; // Waiting for people to connect
+
+       
+
     }
 
-    public enum PlayerStatus {
+    public enum PlayerGameStatus {
+        WIN,
+        LOSE,
+        DRAW,
+        WAITING_FOR_GAME_START,
+        IN_PROGRESS
+    
+    }
+
+
+    public enum PlayerMoveStatus {
         NOTPICKED,
         PICKED,
     }
+
+   
 
 }
 

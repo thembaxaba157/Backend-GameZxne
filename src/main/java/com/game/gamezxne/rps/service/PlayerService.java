@@ -51,7 +51,10 @@ public class PlayerService {
     public PlayerDTO createPlayer(String username){
 
         UserModel user = userRepository.findByUsername(username);
-        PlayerModel playerModel = PlayerModel.builder().user(user).build();
+        // PlayerModel playerModel = PlayerModel.builder().user(user).build();
+        PlayerModel playerModel = new PlayerModel();
+        playerModel.setUser(user);
+
         return toPlayerDto(savePlayer(playerModel));
       
        
@@ -62,7 +65,7 @@ public class PlayerService {
       
         PlayerModel existingPlayer = getPlayer(id);
         existingPlayer.setScore(updatedPlayer.getScore());
-        existingPlayer.setPlayerStatus(updatedPlayer.getPlayerStatus());
+        existingPlayer.setPlayerMoveStatus(updatedPlayer.getPlayerMoveStatus());
         existingPlayer.setPMove(updatedPlayer.getPMove());
         return savePlayer(existingPlayer);
     }

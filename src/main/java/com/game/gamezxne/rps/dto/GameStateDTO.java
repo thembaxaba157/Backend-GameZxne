@@ -1,14 +1,17 @@
 package com.game.gamezxne.rps.dto;
 
-import java.util.List;
+
+
+import com.game.gamezxne.rps.enums.Status.GameStatus;
 
 import lombok.Data;
 
 @Data
 public class GameStateDTO {
-    private Long id;
-    private String lobbyName;
-    private List<PlayerStateDTO> currentPlayers;
-    private String lobbyOwner;
+
+    GameStatus gameStatus;
+    int currRound;
+    int maxNumberRounds;
+    RoundResultDTO roundResult;
 
 }

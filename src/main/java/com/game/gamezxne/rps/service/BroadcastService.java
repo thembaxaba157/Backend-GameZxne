@@ -16,8 +16,8 @@ public class BroadcastService {
 
     }
 
-    public void broadcastMessage(Object message) {
-        messagingTemplate.convertAndSend("/topic/messages", message);
+    public void broadcastMessage(Object message, String destination) {
+        messagingTemplate.convertAndSend("/topic/messages/"+destination, message);
 
     }
 
