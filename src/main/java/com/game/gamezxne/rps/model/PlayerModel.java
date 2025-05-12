@@ -16,14 +16,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
+@Table(name = "player_model")
 @EqualsAndHashCode
 public class PlayerModel {
+
+
+    public PlayerModel() {
+    }
     
+    public PlayerModel (UserModel user){
+        this.user = user;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +43,8 @@ public class PlayerModel {
     @JsonBackReference //research from https://chatgpt.com/c/be49b869-d3db-48a8-88ab-5430278e03f4
     private GameModel game;
 
-    @ManyToOne
-@JoinColumn(name = "user_id", referencedColumnName = "id") // Replace with appropriate column names
+    @Nonnull
+    @OneToOne
     private UserModel user;
     private int score;
     

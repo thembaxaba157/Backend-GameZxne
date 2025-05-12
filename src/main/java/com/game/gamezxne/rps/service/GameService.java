@@ -1,5 +1,6 @@
 package com.game.gamezxne.rps.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,25 +57,21 @@ public class GameService {
 
     public GameModel createGame(CreateGameDTO game, String userName) {
 
-        PlayerModel player = playerService.getPlayerModelByUsername(userName);
-        if (player.getId() == game.getPlayerId()) {
-            // complete for verification
-        }
-        GameModel gameModel = convertToGameModel(game, player);
+        GameModel gameModel = convertToGameModel(game, userName);
         gameModel.setGameStatus(GameStatus.WAITING_FOR_PLAYERS);
         return gameRepository.save(gameModel);
     }
 
     @Transactional
-    private GameModel convertToGameModel(CreateGameDTO gameDTO, PlayerModel player) {
+    private GameModel convertToGameModel(CreateGameDTO gameDTO, String username) {
 
         GameModel game = new GameModel();
+        game.setCurrentPlayers(new ArrayList<PlayerModel>());
         game.setLobbyName(gameDTO.getLobbyName());
         game.setNumberOfRounds(gameDTO.getNumberOfRounds());
-        game.setLobbyMasterPlayer(player);
         game.setNumberOfRounds(gameDTO.getNumberOfPlayers());
         gameRepository.save(game);
-        game = addPlayer(player.getId(), game.getId());
+        game = addPlayer(username, game.getId());
 
         return game;
     }
@@ -93,9 +90,9 @@ public class GameService {
     }
 
     @Transactional
-    public GameModel addPlayer(Long playerid, Long gameid) {
+    public GameModel addPlayer(String userName, Long gameid) {
         GameModel gameModel = getGame(gameid);
-        PlayerModel player = playerService.getPlayer(playerid);
+        PlayerModel player = playerService.getPlayerModelByUsername(userName);
         if (gameModel != null && player != null) {
             List<PlayerModel> players = gameModel.getCurrentPlayers();
             if (!players.contains(player)) {
@@ -139,12 +136,20 @@ public class GameService {
     }
 
     @Transactional
-    public MoveResponseDTO makeMove(PlayerMoveDTO playerMoveDTO) {
+    public MoveResponseDTO makeMove(String userName, PlayerMoveDTO playerMoveDTO) {
         Optional<GameModel> game = gameRepository.findById(playerMoveDTO.getGame_id());
-        PlayerModel player = playerService.getPlayer(playerMoveDTO.getPlayer_id());
+        PlayerModel player = playerService.getPlayerModelByUsername(userName);
+
         MoveResponseDTO moveResponseDTO = new MoveResponseDTO();
+
+
         if (game.isPresent()) {
             GameModel gameModel = game.get();
+            if(!gameModel.getCurrentPlayers().contains(player)){
+                moveResponseDTO.setPlayerId(player.getId());
+                moveResponseDTO.setMoveResponseMessage(MoveResponseMessage.NOT_PART_OF_THE_GAME);
+                return moveResponseDTO;
+            }
             if (player.getGame().equals(gameModel)) {
                 if (gameModel.getGameStatus().equals(GameStatus.IN_PROGRESS)) {
                     if (playerMoveDTO.getMove() instanceof Move

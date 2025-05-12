@@ -51,8 +51,9 @@ public class PlayerService {
     public PlayerDTO createPlayer(String username){
 
         UserModel user = userRepository.findByUsername(username);
+        PlayerModel playerModel = new PlayerModel(user);
         // PlayerModel playerModel = PlayerModel.builder().user(user).build();
-        PlayerModel playerModel = new PlayerModel();
+        
         playerModel.setUser(user);
 
         return toPlayerDto(savePlayer(playerModel));
@@ -71,7 +72,7 @@ public class PlayerService {
     }
 
     public PlayerDTO getPlayerByUsername(String userName) {
-        UserModel user = userRepository.findByUsername(userName);
+        UserModel user = findUserModelbyUsername(userName);
 
         return toPlayerDto(playerRepository.findByUser(user));
       
@@ -82,5 +83,9 @@ public class PlayerService {
         PlayerDTO playerDTO = PlayerDTO.builder().id(playerModel.getId()).username(playerModel.getUser().getUsername()).build();
         return playerDTO;
     }
-    
+
+    private UserModel findUserModelbyUsername(String username){
+        return userRepository.findByUsername(username);
+    }
+
 }

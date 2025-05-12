@@ -13,7 +13,5 @@ public class PlayerMoveDTO {
     
     @Enumerated(EnumType.STRING)
     Move move;
-
-    Long player_id;
     
 }

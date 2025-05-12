@@ -73,16 +73,31 @@ public class GameController {
 
     
     @PutMapping("join/{id}")
-    public ResponseEntity<GameModel> joinGame(@PathVariable Long id, @RequestBody Long playerId){
+    @PreAuthorize("isAuthenticated")
+    public ResponseEntity<GameModel> joinGame(@PathVariable Long id){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = null;
+
+        if(authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
         
-       return new ResponseEntity<>(gameService.addPlayer(playerId, id),HttpStatus.OK);
+       return new ResponseEntity<>(gameService.addPlayer(userName, id),HttpStatus.OK);
     }
 
     @PostMapping("/move")
+    @PreAuthorize("isAuthenticated")
     @ResponseBody
     public ResponseEntity<MoveResponseDTO> makeMove(@RequestBody PlayerMoveDTO playerMoveDTO) {
-        
-        return new ResponseEntity<>(gameService.makeMove(playerMoveDTO), HttpStatus.OK);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = null;
+
+        if(authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            userName = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+
+        return new ResponseEntity<>(gameService.makeMove(userName,playerMoveDTO), HttpStatus.OK);
     }
 
 }

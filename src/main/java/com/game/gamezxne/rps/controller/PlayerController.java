@@ -30,6 +30,7 @@ public class PlayerController {
 
     //saveforadmin
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public List<PlayerModel> getAllPlayers() {
         return playerService.getAllPlayers();
     }
@@ -63,7 +64,10 @@ public class PlayerController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = null;
 
+        System.out.println("WHAT");
+
         if(authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            
             userName = ((UserDetails) authentication.getPrincipal()).getUsername();
         }
 
@@ -74,12 +78,14 @@ public class PlayerController {
 
     //saveforadmin
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public void deletePlayer(@PathVariable Long id) {
         playerService.deletePlayer(id);
     }
     
     //saveforadmin
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PlayerModel> updatePlayer(@PathVariable Long id, @RequestBody PlayerModel updatedPlayer) {
       return new ResponseEntity<>(playerService.updatePlayer(updatedPlayer, id), HttpStatus.OK);
            
