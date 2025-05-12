@@ -1,5 +1,6 @@
 package com.game.gamezxne.rps.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -35,14 +36,16 @@ public class GameModel {
     @OneToMany(mappedBy = "game")
     @JsonManagedReference //research from https://chatgpt.com/c/be49b869-d3db-48a8-88ab-5430278e03f4
     private List<PlayerModel> currentPlayers;
-        
+    
+
     @Enumerated(EnumType.STRING)//From persistance, this will convert enum to string whenever requested or stored in the database
-    // @Column(name = "game_status", nullable = false, columnDefinition = "VARCHAR")
     private GameStatus gameStatus;
     
     private int currentRound;
     
     private int numberOfRounds;
+
+    private int numberOfPlayers;
 
     
 

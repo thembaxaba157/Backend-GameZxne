@@ -4,7 +4,7 @@ stop docker compose
     - docker-compose -down
 
 run mysql from terminal using docker
-    - docker exec -it <container name> mysql -u gamezxne_user -p
+    - docker exec -it mysql_app mysql -u gamezxne_user -p
 
 check current running dockers
     - docker ps
