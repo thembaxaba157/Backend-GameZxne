@@ -3,6 +3,7 @@ package com.game.gamezxne.auth.jwt;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,6 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
     
-    // private String SECRET_KEY = "secret";
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String extractUsername(String token) {
@@ -57,11 +57,16 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .setId(UUID.randomUUID().toString()) //JAVA FUNCTION TO SET GENERATE UUID
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 *10))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
             }
+
+    public String extractJTI(String token){
+        return extractClaim(token, Claims::getId);
+    }
 
     public boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
