@@ -1,4 +1,4 @@
-package com.game.gamezxne.auth.dto;
+package com.game.gamezxne.auth.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

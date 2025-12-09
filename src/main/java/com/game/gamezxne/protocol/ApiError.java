@@ -15,7 +15,7 @@ public class ApiError {
     private int code;
     private String type;
     private String path;
-    private Map<String, String> details;
+    private Map<String, String> errorFields;
 
     public ApiError(Instant timestamp, int code, String type, String path){
 
@@ -25,11 +25,11 @@ public class ApiError {
         this.path = path;
     }
 
-    public ApiError(Instant timestamp, int code, String type, String path, Map<String, String> details){
+    public ApiError(Instant timestamp, int code, String type, String path, Map<String, String> errorFields){
         this.timestamp = timestamp;
         this.code = code;
         this.type = type;
         this.path = path;
-        this.details = details;
+        this.errorFields = errorFields;
     }
 }

@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.game.gamezxne.auth.dto.AuthRequestDto;
-import com.game.gamezxne.auth.dto.AuthResponseDTO;
-import com.game.gamezxne.auth.dto.RegisterUserDto;
-import com.game.gamezxne.auth.dto.UserReponseDto;
+import com.game.gamezxne.auth.dto.request.AuthRequestDto;
+import com.game.gamezxne.auth.dto.request.RegisterRequestDto;
+import com.game.gamezxne.auth.dto.response.AuthResponseDTO;
+import com.game.gamezxne.auth.dto.response.UserResponseDto;
 import com.game.gamezxne.auth.service.AuthService;
 import com.game.gamezxne.protocol.ApiResponse;
 
@@ -28,7 +28,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<?>> register(@RequestBody @Valid RegisterUserDto registrationDetails) {
+    public ResponseEntity<ApiResponse<?>> register(@RequestBody @Valid RegisterRequestDto registrationDetails) {
         AuthResponseDTO authResponseDTO = authService.registerUser(registrationDetails);
       
         ApiResponse<AuthResponseDTO> apiResponse = new ApiResponse<>(true, authResponseDTO,"User successully registered and logged in");
@@ -47,10 +47,10 @@ public class AuthController {
 
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<?>> getUsers(){
-        List<UserReponseDto> users = authService.getUsers();
+        List<UserResponseDto> users = authService.getUsers();
 
         String message = users.isEmpty() ? "No users found" : "Success";
-        ApiResponse<List<UserReponseDto>> apiResponse = new ApiResponse<List<UserReponseDto>>(true, users,message);
+        ApiResponse<List<UserResponseDto>> apiResponse = new ApiResponse<List<UserResponseDto>>(true, users,message);
 
         return ResponseEntity.ok().body(apiResponse);
     }
@@ -58,8 +58,8 @@ public class AuthController {
     @GetMapping("/users/{id}")
     public ResponseEntity<ApiResponse<?>> getUser(@PathVariable Long id){
 
-        UserReponseDto user = authService.getUserbyId(id);
-        ApiResponse<UserReponseDto> apiResponse = new ApiResponse<UserReponseDto>(false, user);
+        UserResponseDto user = authService.getUserbyId(id);
+        ApiResponse<UserResponseDto> apiResponse = new ApiResponse<UserResponseDto>(false, user);
 
         return ResponseEntity.ok().body(apiResponse);
     }

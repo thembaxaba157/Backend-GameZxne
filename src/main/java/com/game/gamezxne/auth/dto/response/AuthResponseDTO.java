@@ -1,14 +1,14 @@
-package com.game.gamezxne.auth.dto;
+package com.game.gamezxne.auth.dto.response;
 
 import lombok.Data;
 
 @Data
 public class AuthResponseDTO {
     
-    private UserReponseDto user;
+    private UserResponseDto user;
     private String userSessionToken;
 
-    public AuthResponseDTO(UserReponseDto user, String userSessionToken){
+    public AuthResponseDTO(UserResponseDto user, String userSessionToken){
         this.user = user;
         this.userSessionToken = userSessionToken;
     }

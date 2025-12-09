@@ -8,11 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.game.gamezxne.auth.dto.AuthRequestDto;
-import com.game.gamezxne.auth.dto.AuthResponseDTO;
-import com.game.gamezxne.auth.dto.DtoMapper;
-import com.game.gamezxne.auth.dto.RegisterUserDto;
-import com.game.gamezxne.auth.dto.UserReponseDto;
+
+import com.game.gamezxne.auth.dto.mapper.DtoMapper;
+import com.game.gamezxne.auth.dto.request.AuthRequestDto;
+import com.game.gamezxne.auth.dto.request.RegisterRequestDto;
+import com.game.gamezxne.auth.dto.response.AuthResponseDTO;
+import com.game.gamezxne.auth.dto.response.UserResponseDto;
 import com.game.gamezxne.auth.jwt.JwtTokenProvider;
 import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.auth.repository.UserRepository;
@@ -41,7 +42,7 @@ public class AuthService {
 
 
 
-    public AuthResponseDTO registerUser(RegisterUserDto registrationDetails) {
+    public AuthResponseDTO registerUser(RegisterRequestDto registrationDetails) {
         System.out.println("did you reach 1");
         UserModel newUser = createUser(registrationDetails);
         String token = generateToken(newUser);
@@ -51,11 +52,11 @@ public class AuthService {
     }
 
     private AuthResponseDTO generateAuthResponse(UserModel user, String token){
-        UserReponseDto userReponseDto = new UserReponseDto(user.getId(), user.getUsername(), user.getEmail());    
+        UserResponseDto userReponseDto = new UserResponseDto(user.getId(), user.getUsername(), user.getEmail());    
         return new AuthResponseDTO(userReponseDto, token);
     }
 
-    private UserModel createUser(RegisterUserDto registrationDetailsu) {
+    private UserModel createUser(RegisterRequestDto registrationDetailsu) {
         UserModel userModel = new UserModel();
 
         //TODO VALIDATE AND ERROR HANDLE
@@ -86,7 +87,7 @@ public class AuthService {
 
 
 
-    public List<UserReponseDto> getUsers() {
+    public List<UserResponseDto> getUsers() {
         return userRepository.findAll()
         .stream()
         .map(DtoMapper:: toUserResponseDto
@@ -96,7 +97,7 @@ public class AuthService {
 
 
 
-    public UserReponseDto getUserbyId(Long id) {
+    public UserResponseDto getUserbyId(Long id) {
         Optional<UserModel> user = userRepository.findById(id);
 
         return user.map(DtoMapper:: toUserResponseDto).orElseThrow(()-> new ResourceNotFound("User with ID"+ id + "Not Found"));
