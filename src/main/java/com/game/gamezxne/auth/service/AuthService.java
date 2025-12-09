@@ -1,5 +1,8 @@
 package com.game.gamezxne.auth.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,11 +10,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.game.gamezxne.auth.dto.AuthRequestDto;
 import com.game.gamezxne.auth.dto.AuthResponseDTO;
+import com.game.gamezxne.auth.dto.DtoMapper;
 import com.game.gamezxne.auth.dto.RegisterUserDto;
 import com.game.gamezxne.auth.dto.UserReponseDto;
 import com.game.gamezxne.auth.jwt.JwtTokenProvider;
 import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.auth.repository.UserRepository;
+import com.game.gamezxne.exceptions.ResourceNotFound;
+
 import org.springframework.security.authentication.AuthenticationManager;
 
 
@@ -36,6 +42,7 @@ public class AuthService {
 
 
     public AuthResponseDTO registerUser(RegisterUserDto registrationDetails) {
+        System.out.println("did you reach 1");
         UserModel newUser = createUser(registrationDetails);
         String token = generateToken(newUser);
         
@@ -44,16 +51,8 @@ public class AuthService {
     }
 
     private AuthResponseDTO generateAuthResponse(UserModel user, String token){
-        UserReponseDto userReponseDto = new UserReponseDto();
-        userReponseDto.setEmail(user.getEmail());
-        userReponseDto.setUsername(user.getUsername());
-        userReponseDto.setId(user.getId());
-        
-
-        AuthResponseDTO authResponseDTO = new AuthResponseDTO();
-        authResponseDTO.setUserReponseDto(userReponseDto);
-        authResponseDTO.setUserSessionToken(token);
-        return authResponseDTO;
+        UserReponseDto userReponseDto = new UserReponseDto(user.getId(), user.getUsername(), user.getEmail());    
+        return new AuthResponseDTO(userReponseDto, token);
     }
 
     private UserModel createUser(RegisterUserDto registrationDetailsu) {
@@ -83,6 +82,24 @@ public class AuthService {
         
 
         return generateAuthResponse(user, token);
+    }
+
+
+
+    public List<UserReponseDto> getUsers() {
+        return userRepository.findAll()
+        .stream()
+        .map(DtoMapper:: toUserResponseDto
+        ).toList();
+       
+    }
+
+
+
+    public UserReponseDto getUserbyId(Long id) {
+        Optional<UserModel> user = userRepository.findById(id);
+
+        return user.map(DtoMapper:: toUserResponseDto).orElseThrow(()-> new ResourceNotFound("User with ID"+ id + "Not Found"));
     }
     
 

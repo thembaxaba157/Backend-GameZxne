@@ -14,6 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.game.gamezxne.auth.jwt.JwtAuthenticationFilter;
 
+import jakarta.servlet.DispatcherType;
+
 // Configures authentication and security, like JWT, roles
 @Configuration
 public class SecurityConfig {
@@ -26,12 +28,15 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+
+    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf .disable())
             .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
+                authorizeRequests.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()  //allows the spring boot validator to return proper error messages instead of 403 forbidden
                     .requestMatchers("/auth/**").permitAll() // Allow public access to /auth
                     .requestMatchers("/ws/**").permitAll() // Allow public access to /game
                     .requestMatchers("/lobby").permitAll()

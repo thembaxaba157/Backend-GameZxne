@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.game.gamezxne.exceptions.ResourceNotFound;
 import com.game.gamezxne.rps.dto.CreateGameDTO;
 import com.game.gamezxne.rps.dto.EndGameResultDTO;
 import com.game.gamezxne.rps.dto.GameStateDTO;
@@ -20,7 +21,6 @@ import com.game.gamezxne.rps.enums.MoveResponseMessage;
 import com.game.gamezxne.rps.enums.Status.GameStatus;
 import com.game.gamezxne.rps.enums.Status.PlayerGameStatus;
 import com.game.gamezxne.rps.enums.Status.PlayerMoveStatus;
-import com.game.gamezxne.rps.exceptions.GameNotFoundException;
 import com.game.gamezxne.rps.model.GameModel;
 import com.game.gamezxne.rps.model.PlayerModel;
 import com.game.gamezxne.rps.repository.GameRepository;
@@ -46,7 +46,7 @@ public class GameService {
     }
 
     public GameModel getGame(Long id) {
-        return gameRepository.findById(id).orElseThrow(() -> new GameNotFoundException("Game not Found"));
+        return gameRepository.findById(id).orElseThrow(() -> new ResourceNotFound("Game not Found"));
     }
 
     public void deleteGame(Long id) {
