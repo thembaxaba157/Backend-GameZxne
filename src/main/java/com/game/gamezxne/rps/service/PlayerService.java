@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.auth.repository.UserRepository;
-import com.game.gamezxne.exceptions.ResourceNotFound;
+import com.game.gamezxne.exceptions.ResourceNotFoundException;
 import com.game.gamezxne.rps.dto.PlayerDTO;
 import com.game.gamezxne.rps.model.PlayerModel;
 import com.game.gamezxne.rps.repository.PlayerRepository;
@@ -29,7 +29,7 @@ public class PlayerService {
     }
 
     public PlayerModel getPlayer(Long id){
-        return playerRepository.findById(id).orElseThrow(()-> new ResourceNotFound("Player not Found")); //fix to return an appropriate error
+        return playerRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Player not Found")); //fix to return an appropriate error
     }
 
     public PlayerModel getPlayerModelByUsername(String username){

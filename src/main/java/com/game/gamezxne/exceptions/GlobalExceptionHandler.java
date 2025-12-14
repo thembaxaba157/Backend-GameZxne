@@ -19,8 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ResourceNotFound.class)
-    public ResponseEntity<ApiResponse<ApiError>> handleResourceNotFound(ResourceNotFound ex, HttpServletRequest req){ 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<ApiError>> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest req){ 
 
         ApiError error = new ApiError(Instant.now(), HttpStatus.NOT_FOUND.value(),
         "ResourceNotFound", req.getRequestURI());
@@ -29,6 +29,25 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(response);
     }
+
+    @ExceptionHandler(ResourceAlreadyExistException.class)
+    public ResponseEntity<ApiResponse<ApiError>> handleResourceAlreadyExists(ResourceAlreadyExistException ex, 
+        HttpServletRequest req){
+
+
+             Map<String, String> details = new HashMap<>();
+        details.put(ex.getField(), ex.getMessage());
+       
+        ApiError error = new ApiError(Instant.now(), HttpStatus.CONFLICT.value(),
+        "ResourceAlreadyExists",req.getRequestURI(),details);
+        
+
+        ApiResponse<ApiError> response = new ApiResponse<ApiError>(false, error, "Conflict"); 
+        
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<ApiError>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest req){

@@ -17,7 +17,8 @@ import com.game.gamezxne.auth.dto.response.UserResponseDto;
 import com.game.gamezxne.auth.jwt.JwtTokenProvider;
 import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.auth.repository.UserRepository;
-import com.game.gamezxne.exceptions.ResourceNotFound;
+import com.game.gamezxne.exceptions.ResourceAlreadyExistException;
+import com.game.gamezxne.exceptions.ResourceNotFoundException;
 
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -43,7 +44,6 @@ public class AuthService {
 
 
     public AuthResponseDTO registerUser(RegisterRequestDto registrationDetails) {
-        System.out.println("did you reach 1");
         UserModel newUser = createUser(registrationDetails);
         String token = generateToken(newUser);
         
@@ -57,9 +57,22 @@ public class AuthService {
     }
 
     private UserModel createUser(RegisterRequestDto registrationDetailsu) {
-        UserModel userModel = new UserModel();
+        
+        if(userRepository.existsbyUsername(registrationDetailsu.getUsername())){ 
+            throw new ResourceAlreadyExistException(
+            "username",
+            "Username already Exists"
+        );
+        }
 
-        //TODO VALIDATE AND ERROR HANDLE
+        if(userRepository.existsbyEmail(registrationDetailsu.getEmail())){ 
+            throw new ResourceAlreadyExistException(
+            "email",
+            "Email already Exists"
+        );
+        }
+
+        UserModel userModel = new UserModel();
         userModel.setEmail(registrationDetailsu.getEmail());
         userModel.setUsername(registrationDetailsu.getUsername());
         userModel.setPassword(passwordEncoder.encode(registrationDetailsu.getPassword()));
@@ -100,7 +113,7 @@ public class AuthService {
     public UserResponseDto getUserbyId(Long id) {
         Optional<UserModel> user = userRepository.findById(id);
 
-        return user.map(DtoMapper:: toUserResponseDto).orElseThrow(()-> new ResourceNotFound("User with ID"+ id + "Not Found"));
+        return user.map(DtoMapper:: toUserResponseDto).orElseThrow(()-> new ResourceNotFoundException("User with ID"+ id + "Not Found"));
     }
     
 
