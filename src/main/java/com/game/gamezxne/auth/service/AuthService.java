@@ -56,27 +56,27 @@ public class AuthService {
         return new AuthResponseDTO(userReponseDto, token);
     }
 
-    private UserModel createUser(RegisterRequestDto registrationDetailsu) {
+    private UserModel createUser(RegisterRequestDto registrationDetails) {
         
-        if(userRepository.existsbyUsername(registrationDetailsu.getUsername())){ 
+        if(userRepository.existsByUsername(registrationDetails.getUsername())){ 
             throw new ResourceAlreadyExistException(
             "username",
-            "Username already Exists"
+            "Username already Exists, pick another one"
         );
         }
 
-        if(userRepository.existsbyEmail(registrationDetailsu.getEmail())){ 
+        if(userRepository.existsByEmail(registrationDetails.getEmail())){ 
             throw new ResourceAlreadyExistException(
             "email",
-            "Email already Exists"
+            "Email already Exists, pick another one "
         );
         }
 
-        UserModel userModel = new UserModel();
-        userModel.setEmail(registrationDetailsu.getEmail());
-        userModel.setUsername(registrationDetailsu.getUsername());
-        userModel.setPassword(passwordEncoder.encode(registrationDetailsu.getPassword()));
-        return userRepository.save(userModel);
+        UserModel user = new UserModel();
+        user.setEmail(registrationDetails.getEmail());
+        user.setUsername(registrationDetails.getUsername());
+        user.setPassword(passwordEncoder.encode(registrationDetails.getPassword()));
+        return userRepository.save(user);
     }
 
     private String generateToken(UserModel newUser) {
