@@ -79,5 +79,14 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ApiResponse<ApiError>> handleInvalidCredentialsException(InvalidCredentialsException ex, HttpServletRequest req){
+        ApiError error = new ApiError(Instant.now(), 401, "Invalid Credentials", req.getRequestURI());
+
+        ApiResponse<ApiError> response = new ApiResponse<ApiError>(false, error, "Invalid Username or Password");
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(response);
+    }
+
 
 }

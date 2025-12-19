@@ -17,11 +17,12 @@ import com.game.gamezxne.auth.dto.response.UserResponseDto;
 import com.game.gamezxne.auth.jwt.JwtTokenProvider;
 import com.game.gamezxne.auth.model.UserModel;
 import com.game.gamezxne.auth.repository.UserRepository;
+import com.game.gamezxne.exceptions.InvalidCredentialsException;
 import com.game.gamezxne.exceptions.ResourceAlreadyExistException;
 import com.game.gamezxne.exceptions.ResourceNotFoundException;
 
 import org.springframework.security.authentication.AuthenticationManager;
-
+import org.springframework.security.authentication.BadCredentialsException;
 
 @Service
 public class AuthService {
@@ -29,47 +30,43 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
-    
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, CustomUserDetailsService userDetailsService){
+    public AuthService(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
+            PasswordEncoder passwordEncoder, CustomUserDetailsService userDetailsService) {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-
-
     public AuthResponseDTO registerUser(RegisterRequestDto registrationDetails) {
         UserModel newUser = createUser(registrationDetails);
         String token = generateToken(newUser);
-        
-        
+
         return generateAuthResponse(newUser, token);
     }
 
-    private AuthResponseDTO generateAuthResponse(UserModel user, String token){
-        UserResponseDto userReponseDto = new UserResponseDto(user.getId(), user.getUsername(), user.getEmail());    
+    private AuthResponseDTO generateAuthResponse(UserModel user, String token) {
+        UserResponseDto userReponseDto = new UserResponseDto(user.getId(), user.getUsername(), user.getEmail());
         return new AuthResponseDTO(userReponseDto, token);
     }
 
     private UserModel createUser(RegisterRequestDto registrationDetails) {
-        
-        if(userRepository.existsByUsername(registrationDetails.getUsername())){ 
+
+        if (userRepository.existsByUsername(registrationDetails.getUsername())) {
             throw new ResourceAlreadyExistException(
-            "username",
-            "Username already Exists, pick another one"
-        );
+                    "username",
+                    "Username already Exists, pick another one");
         }
 
-        if(userRepository.existsByEmail(registrationDetails.getEmail())){ 
+        if (userRepository.existsByEmail(registrationDetails.getEmail())) {
             throw new ResourceAlreadyExistException(
-            "email",
-            "Email already Exists, pick another one "
-        );
+                    "email",
+                    "Email already Exists, pick another one ");
         }
 
         UserModel user = new UserModel();
@@ -82,39 +79,40 @@ public class AuthService {
     private String generateToken(UserModel newUser) {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getUsername());
         return jwtTokenProvider.generateToken(userDetails);
-        
+
     }
-    private String generateToken(AuthRequestDto authRequest){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+
+    private String generateToken(AuthRequestDto authRequest) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        } catch (BadCredentialsException ex) {
+            throw new InvalidCredentialsException("Invalid username or password");
+        }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
         return jwtTokenProvider.generateToken(userDetails);
     }
 
     public AuthResponseDTO loginUser(AuthRequestDto authRequestDto) {
+
         String token = generateToken(authRequestDto);
         UserModel user = userRepository.findByUsername(authRequestDto.getUsername());
-        
 
         return generateAuthResponse(user, token);
     }
 
-
-
     public List<UserResponseDto> getUsers() {
         return userRepository.findAll()
-        .stream()
-        .map(DtoMapper:: toUserResponseDto
-        ).toList();
-       
+                .stream()
+                .map(DtoMapper::toUserResponseDto).toList();
+
     }
-
-
 
     public UserResponseDto getUserbyId(Long id) {
         Optional<UserModel> user = userRepository.findById(id);
 
-        return user.map(DtoMapper:: toUserResponseDto).orElseThrow(()-> new ResourceNotFoundException("User with ID"+ id + "Not Found"));
+        return user.map(DtoMapper::toUserResponseDto)
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID" + id + "Not Found"));
     }
-    
 
 }
