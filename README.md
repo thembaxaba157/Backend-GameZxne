@@ -12,7 +12,7 @@
 
 ---
 
-## 📌 Overview
+## Overview
 
 **GameZxne** is a multiplayer gaming backend platform built in **Java** using **Spring Boot**. It supports real-time gameplay using **WebSockets**, secure authentication via **JWT**, and a full REST API for managing users, games, and players.
 
@@ -20,7 +20,7 @@ It is intended to serve as the **backend for a multiplayer Rock-Paper-Scissors g
 
 ---
 
-## 🧩 Key Features
+## Key Features
 
 - ✅ **User Registration & Login** using JWT
 - ✅ **Game Lobby Management** (Create, Join, Update, Delete)
@@ -66,9 +66,9 @@ com.game.gamezxne
 
 ---
 
-## 🚀 Setup & Run
+## Setup & Run
 
-### 📦 Prerequisites
+### Prerequisites
 
 - Java 17+
 - Maven
@@ -124,9 +124,9 @@ More endpoints available in `GameController` and `PlayerController`.
 
 ---
 
-## 🧪 Testing & CI/CD
+## Testing & CI/CD
 
-### ✅ GitHub Actions
+### GitHub Actions
 
 - Builds, tests, and runs Maven on every push to `main`
 - Launches Dockerized MySQL for integration
@@ -134,7 +134,7 @@ More endpoints available in `GameController` and `PlayerController`.
   - Bump version in `pom.xml`
   - Push GitHub release notes
 
-### 🧪 Unit Tests (Planned)
+### Unit Tests (Planned)
 
 - Will use **JUnit 5** and **Mockito**
 - CI step already in place
@@ -154,18 +154,18 @@ See `.releaserc.yml` and GitHub Action for setup.
 
 ---
 
-## 🧠 Future Improvements
+## Future Improvements
 
-- 🧪 Full test coverage (unit + integration)
-- 🎨 Frontend (React or JavaFX) integration
-- 🛠 Admin panel for game moderation
-- 💾 Redis caching for real-time data
-- 📊 Leaderboards and stats tracking
-- ♻️ Graceful WebSocket disconnect and reconnect support
+- Full test coverage (unit + integration)
+- Frontend (React or JavaFX) integration
+- Admin panel for game moderation
+- Redis caching for real-time data
+- Leaderboards and stats tracking
+- Graceful WebSocket disconnect and reconnect support
 
 ---
 
-## 🧑‍💻 Contributing
+## Contributing
 
 ```bash
 # 1. Fork the repo
@@ -187,7 +187,7 @@ This project is licensed under the **MIT License**.
 
 ---
 
-## 📣 Acknowledgements
+## Acknowledgements
 
 - Spring Boot community & STOMP/WebSocket guides
 - JWT.io for authentication principles
@@ -195,7 +195,7 @@ This project is licensed under the **MIT License**.
 
 ---
 
-## 🔗 Repository
+## Repository
 
 [https://github.com/thembaxaba157/Backend-GameZxne](https://github.com/thembaxaba157/Backend-GameZxne)
 
